@@ -1,31 +1,62 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { addToWishlist } from '../redux/slices/wishlistSlice'
+
 
 function View() {
+  const userWishlist=useSelector(state=>state.wishlistReducer)
+  const dispatch=useDispatch()
+ const {id}= useParams()
+//  console.log(id);
+const [product,setProduct]=useState({})
+ useEffect(()=>{
+  const allProducts=JSON.parse(sessionStorage.getItem("allProducts"))
+  setProduct(allProducts.find((item)=>item.id==id))
+ },[])
+//  console.log(product);
+ const handleAddToWishlist=()=>{
+  const existingProduct= userWishlist.find((item)=>item.id==product.id)
+  if(existingProduct){
+    alert("Product already exists in your wishllist...")
+  }else{
+    dispatch(addToWishlist(product))
+  }
+ }
+
+
   return (
     <div>
       <Header/>
-      <div className="grid md:grid-cols-2 my-5 gap-4 items-center" style={{paddingTop:'100px'}}>
+      <div className="grid md:grid-cols-2 py-5 gap-4 items-center" style={{paddingTop:'100px'}}>
         <div className="flex flex-col justify-center items-center">
-         <img src="https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp" alt="product"  className='' />
+         <img src={product.thumbnail} alt="product"  className='' />
          <div className="flex justify-around w-full my-5">
-          <Link to={'/wishlist'} className='bg-blue-600 rounded shadow py-1 px-3 text-white'> ADD TO WISHLIST</Link>
-          <Link to={'/cart'} className='bg-green-600 rounded shadow py-1 px-3 text-white'>ADD TO CART</Link>
+          <button onClick={handleAddToWishlist} className='bg-blue-600 rounded shadow py-1 px-3 text-white'> ADD TO WISHLIST</button>
+          <button className='bg-green-600 rounded shadow py-1 px-3 text-white'>ADD TO CART</button>
          </div>
         </div>
         <div className="ms-5" style={{marginRight:'100px'}}>
-          <h1 className='text-3xl '>title</h1>
-          <h1 className='text-red-500 '>$ 300</h1>
-          <h2><span className='font-bold'>Brand</span> : Essence</h2>
+          <h1 className='text-3xl my-3'>{product?.title}</h1>
+          <h1 className='text-red-500 '>${product?.price}</h1>
+          <h2><span className='font-bold'>Brand</span> : {product?.brand}</h2>
+          <h2><span className='font-bold'>Category</span> : {product?.category}</h2>
+
           <h3 className="text-xl text-justify">
-            <span className='font-bold'> Description </span>: Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque neque at corporis ipsa, ea molestias alias voluptas eligendi tempore consequuntur repellat voluptatibus facere architecto doloribus delectus deserunt laborum nesciunt reprehenderit?
+            <span className='font-bold'> Description </span>: {product?.description}
           </h3>
           <h1 className='text-xl font-bold'>Client reviews</h1>
+{
+  product?.reviews?.length>0&&
+  product?.reviews?.map((item)=>(
+
           <div className=" shadow my-3 p-2">
-              <p><span className="font-bold">client name</span> : message</p>
-              <p>Rating : 3 <i className='fa-solid fa-star text-yellow-400'></i></p>
+              <p><span className="font-bold">{item.reviewerName}</span> : {item?.comment}!</p>
+              <p>Rating : {item?.rating} <i className='fa-solid fa-star text-yellow-400'></i></p>
           </div>
+  ))
+}
         </div>
       </div>
     </div>
