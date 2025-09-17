@@ -3,19 +3,24 @@ import Header from '../components/Header'
 import { Link, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { addToWishlist } from '../redux/slices/wishlistSlice'
+import { addToCart } from '../redux/slices/cartSlice'
 
 
 function View() {
   const userWishlist=useSelector(state=>state.wishlistReducer)
-  const dispatch=useDispatch()
- const {id}= useParams()
+   const userCart=useSelector(state=>state.cartReducer)
+
+const dispatch=useDispatch()
+const {id}= useParams()
 //  console.log(id);
 const [product,setProduct]=useState({})
+
  useEffect(()=>{
   const allProducts=JSON.parse(sessionStorage.getItem("allProducts"))
   setProduct(allProducts.find((item)=>item.id==id))
  },[])
 //  console.log(product);
+
  const handleAddToWishlist=()=>{
   const existingProduct= userWishlist.find((item)=>item.id==product.id)
   if(existingProduct){
@@ -25,7 +30,13 @@ const [product,setProduct]=useState({})
   }
  }
 
-
+const handleCart=()=>{
+  dispatch(addToCart(product))
+  const existingProduct=userCart?.find(item=>item.id==product.id)
+  if(existingProduct){
+    alert("Product Updated Successfully")
+  }
+}
   return (
     <div>
       <Header/>
@@ -33,8 +44,10 @@ const [product,setProduct]=useState({})
         <div className="flex flex-col justify-center items-center">
          <img src={product.thumbnail} alt="product"  className='' />
          <div className="flex justify-around w-full my-5">
+
           <button onClick={handleAddToWishlist} className='bg-blue-600 rounded shadow py-1 px-3 text-white'> ADD TO WISHLIST</button>
-          <button className='bg-green-600 rounded shadow py-1 px-3 text-white'>ADD TO CART</button>
+
+          <button onClick={handleCart} className='bg-green-600 rounded shadow py-1 px-3 text-white'>ADD TO CART</button>
          </div>
         </div>
         <div className="ms-5" style={{marginRight:'100px'}}>
