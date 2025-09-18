@@ -3,6 +3,7 @@ import Header from '../components/Header'
 import { useDispatch, useSelector } from 'react-redux'
 import { removeWishlistItem } from '../redux/slices/wishlistSlice'
 import { addToCart } from '../redux/slices/cartSlice'
+import { Link } from 'react-router-dom'
 
 function Wishlist() {
   const ourWishlist=useSelector(state=>state.wishlistReducer)
@@ -22,10 +23,10 @@ const handleCart=(product)=>{
   return (
     <div>
       <Header/>
-      <div style={{paddingTop:'100px'}} className='mx-5 mb-5'>
-        <h1 className="text-3xl text-red-600 text-center">My Wishlist</h1>
    {
      ourWishlist?.length>0?
+      <div style={{paddingTop:'100px'}} className='mx-5 mb-5'>
+        <h1 className="text-3xl text-red-600 text-center">My Wishlist</h1>
         <div className="grid grid-cols-4 gap-4" style={{margin:'60px 0px'}}>
           {
     ourWishlist?.map(product=>(
@@ -41,14 +42,16 @@ const handleCart=(product)=>{
         </div>
     ))}
   </div>
+       </div>
     :
    
-      <div className="text-center">
-        <p className=' text-red-500 text-3xl' style={{margin:'100px 0px'}}>Wishlist is Empty !!!</p>
+      <div className="py-5 flex flex-col justify-center items-center " style={{paddingTop:'100px'}} >
+        <p className=' text-red-500 text-3xl py-5' > Your Wishlist is Empty !!!</p>
+        <img src="https://assets-v2.lottiefiles.com/a/447eb850-1151-11ee-962a-df534d0253f7/tnGcU7eR5U.png"  alt="image" width={'250px'} height={'250px'} />
+         <Link to={'/'} className='bg-blue-500 text-white rounded p-2 my-3'>BACK TO HOME</Link>
       </div>
  
   }
-       </div>
     </div>
   )
 }

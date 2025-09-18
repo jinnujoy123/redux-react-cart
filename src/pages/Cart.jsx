@@ -37,7 +37,7 @@ function Cart() {
             userCart?.length ?
         <div className="">
           <h1 className="text-3xl text-blue-600 py-3">Cart Summary</h1>
-          <div className="col-span-2 grid grid-cols-3  p-5">
+          <div className="col-span-2 md:grid grid-cols-3  p-5">
               <div className="flex flex-col col-span-2 rounded shadow p-5 gap-4 ">
           {/* table */}
           <table className="table-auto w-full">
@@ -57,9 +57,10 @@ function Cart() {
                 userCart?.map((product,index)=>(
               <tr>
                 <td>{index+1}</td>
+                <td>
                 <Link to={`/${product?.id}/view`}>
-                  <td className=''>{product?.title?.slice(0,20)}...</td>
-                </Link>
+                 {product?.title?.slice(0,20)}...
+                </Link></td>
                 <td> <img width={'70px'} height={'70px'} src={product?.thumbnail} alt="product"   /></td>
                 <td><div className="flex">
           <button onClick={()=>handleDecrementQuantity(product)} className="font-bold">-</button>
@@ -90,7 +91,7 @@ function Cart() {
         :
 
         <div className="py-5 flex flex-col justify-center items-center">
-          <img src="https://static.vecteezy.com/system/resources/thumbnails/008/515/488/small_2x/empty-cart-flat-illustration-concept-vector.jpg" alt="image" width={'250px'} height={'250px'}/>
+          <img src="https://bakestudio.in/assets/images/cart/empty-cart.gif" alt="image" width={'250px'} height={'250px'}/>
           <h1 className='text-red-500 text-3xl py-5'>Your Cart is Empty!!!
           </h1>
           <Link to={'/'} className='bg-blue-500 text-white rounded p-2 my-3'>BACK TO HOME</Link>
